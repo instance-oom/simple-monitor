@@ -154,6 +154,7 @@
             <input type="text" class="form-control" name="Key" autocomplete="off" formControlName="Key" placeholder="Enter key (ex data.status)">
             <div *ngIf="column.controls.Key.invalid && submitted">
               <span class="help-block" *ngIf="column.controls.Key.hasError('required')">Key is required.</span>
+              <span class="help-block" *ngIf="column.controls.Key.hasError('maxlength')">Key cannot be more than 100 charters.</span>
             </div>
           </div>
           <div class="text-left" style="width: 50px">

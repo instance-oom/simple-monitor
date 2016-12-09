@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Monitor.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Monitor.Models;
 
 namespace Monitor
 {
@@ -45,8 +45,8 @@ namespace Monitor
                 opt.Filters.Add(new GlobalExceptionFilter());
             });
 
-            //var connection = Configuration["DBSetting:SqliteConnectionString"];
-            //services.AddDbContext<MonitorContext>(options => options.UseSqlite(connection));
+            var connection = Configuration["DBSetting:SqliteConnectionString"];
+            services.AddDbContext<MonitorContext>(options => options.UseSqlite(connection));
 
             services.AddCors(opt =>
             {
@@ -71,7 +71,7 @@ namespace Monitor
                 }
             });
 
-            app.UseCors("CorsSample");
+            // app.UseCors("CorsSample");
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();

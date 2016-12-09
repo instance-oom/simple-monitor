@@ -130,7 +130,7 @@ export class GroupHomePage implements OnInit {
     column = column || {};
     return this._fb.group({
       DisplayName: [column.DisplayName || '', [Validators.required, Validators.maxLength(20)]],
-      Key: [column.Key || '', [Validators.required, Validators.maxLength(20)]]
+      Key: [column.Key || '', [Validators.required, Validators.maxLength(100)]]
     });
   }
 
@@ -231,8 +231,9 @@ export class GroupHomePage implements OnInit {
   }
 
   private copyHost(srcControl: any) {
+    let host = JSON.parse(JSON.stringify(srcControl.value))
     let control = <FormArray>this.panelForm.controls['HostInfos'];
-    control.push(srcControl);
+    control.push(this.initHostInfo(host));
   }
 
   private removeHost(i: number) {

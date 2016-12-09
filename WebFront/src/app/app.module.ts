@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -38,6 +38,7 @@ if (process.env.ENV === 'production') {
     GroupService,
     PanelService
   ],
-  bootstrap: [MonitorApp]
+  bootstrap: [MonitorApp],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

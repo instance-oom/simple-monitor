@@ -84,9 +84,11 @@ namespace Monitor.Bizs
             _db.SaveChanges();
         }
 
-        public bool IsExists(int panelId, string name)
+        public bool IsExists(int groupid, int panelId, string name)
         {
-            var panel = _db.PanelInfos.AsNoTracking().FirstOrDefault(x => x.PanelId != panelId && x.Name == name);
+            var panel =
+                _db.PanelInfos.AsNoTracking()
+                    .FirstOrDefault(x => x.GroupId == groupid && x.PanelId != panelId && x.Name == name);
             return panel != null;
         }
     }

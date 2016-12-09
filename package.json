@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --profile --inline --progress",
-    "build:dev": "rimraf wwwroot/* && webpack --config WebFront/webpack-config/webpack.dev.js --progress --profile --bail",
-    "build:prd": "rimraf wwwroot/* && webpack --config WebFront/webpack-config/webpack.prod.js --progress --profile --bail"
+    "start": "concurrently \"webpack --config WebFront/webpack-config/webpack.dev.js --bail --watch\" \"dotnet watch run\" ",
+    "build": "webpack --config WebFront/webpack-config/webpack.prod.js --progress --profile --bail && dotnet publish",
+    "postinstall": "dotnet restore"
   },
   "keywords": [],
   "author": "Lon",
@@ -33,6 +33,8 @@
     "@types/request": "0.0.34",
     "angular2-template-loader": "^0.6.0",
     "awesome-typescript-loader": "^3.0.0-beta.3",
+    "clean-webpack-plugin": "^0.1.14",
+    "concurrently": "^3.1.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
@@ -42,7 +44,6 @@
     "jasmine-core": "^2.5.2",
     "null-loader": "^0.1.1",
     "raw-loader": "^0.5.1",
-    "rimraf": "^2.5.4",
     "style-loader": "^0.13.1",
     "typescript": "^2.0.10",
     "webpack": "^2.1.0-beta.27",
