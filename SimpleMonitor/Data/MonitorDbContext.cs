@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SimpleMonitor.Models;
 
 namespace SimpleMonitor.Data
 {
-    public class MonitorDbContext : DbContext
+    public sealed class MonitorDbContext : DbContext
     {
         public MonitorDbContext(DbContextOptions<MonitorDbContext> options)
             : base(options)
         {
             Database.EnsureCreated();
         }
+
+        public DbSet<GroupInfo> GroupInfos { get; set; }
+        public DbSet<PanelInfo> PanelInfos { get; set; }
+        public DbSet<HostInfo> HostInfos { get; set; }
+        public DbSet<ColumnInfo> ColumnInfos { get; set; }
     }
 }
