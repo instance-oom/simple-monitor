@@ -11,6 +11,7 @@ namespace SimpleMonitor.Models
         public int PanelId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public PanelType PanelType { get; set; }
         public DateTime InDate { get; set; }
         public DateTime EditDate { get; set; }
 
@@ -20,5 +21,11 @@ namespace SimpleMonitor.Models
 
         public List<HostInfo> HostInfos { get; set; }
         public List<ColumnInfo> ColumnInfos { get; set; }
+    }
+
+    public enum PanelType
+    {
+        Table = 0,
+        Chart = 1
     }
 }

@@ -1,0 +1,42 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/assets/css/min/vendor.min.css",
+    "inputFiles": [
+      "wwwroot/assets/css/vendor/*.css"
+    ],
+    "minify": {
+      "enabled": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/assets/css/min/simple-monitor.min.css",
+    "inputFiles": [
+      "wwwroot/assets/css/*.css"
+    ],
+    "minify": {
+      "enabled": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/min/vendor.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js/vendor/*.js"
+    ],
+    "minify": {
+      "enabled": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/min/simple-monitor.min.js",
+    "inputFiles": [
+      "wwwroot/assets/js/*.js"      
+    ],
+    "minify": {
+      "enabled": true
+    },
+    "sourceMap": false
+  }
+]

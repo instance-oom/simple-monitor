@@ -1,12 +1,26 @@
 ﻿@section links
 {
+  <environment Names="Development">
+    <link rel="stylesheet" asp-href-include="assets/css/**/*.css" asp-src-exclude="assets/css/min" asp-append-version="true" />    
+  </environment>
 
+  <environment Names="Production">
+    <link rel="stylesheet" asp-href-include="assets/css/min/*.min.css" asp-append-version="true" />
+  </environment>
 }
 
 @section scripts
 {
-  <script src="~/dist/angular2.js" asp-append-version="true"></script>
-  <script src="~/dist/main.js" asp-append-version="true"></script>
+  <environment Names="Development">
+    <script asp-src-include="assets/js/**/*.js" asp-src-exclude="assets/js/min" asp-append-version="true"></script>
+    <script src="dist/angular2.js" asp-append-version="true"></script>
+    <script src="dist/main.js" asp-append-version="true"></script>
+  </environment>
+
+  <environment Names="Production">
+    <script asp-append-version="true" asp-src-include="assets/js/min/*.min.js"></script>
+  </environment>
+  
 }
 
 <simple-monitor-app></simple-monitor-app>
