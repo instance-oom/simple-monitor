@@ -2,7 +2,7 @@
 
 @Component({
   selector: 'simple-monitor-app',
-  template: `<h1>Hello, SimpleMonitor</h1>`
+  template: `<router-outlet></router-outlet>`
 })
 export class SimpleMonitorApp {
 

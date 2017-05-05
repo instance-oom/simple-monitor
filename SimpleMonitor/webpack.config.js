@@ -1,25 +1,22 @@
 ﻿const webpackMerge = require('webpack-merge');
 const commonPartial = require('./webpack/webpack.common');
-const clientPartial = require('./webpack/webpack.client');
-const prodPartial = require('./webpack/webpack.prod');
 const { getAotPlugin } = require('./webpack/webpack.aot');
 
-module.exports = function(options, webpackOptions) {
-  webpackOptions = webpackOptions || {};
+module.exports = function (options, webpackOptions) {
+  options = options || {};  
   
    console.log(`Running build for client with AoT Compilation`);
 
   let clientConfig = webpackMerge({},
-    commonPartial,
-    clientPartial,
+    commonPartial,    
     {
       plugins: [
         getAotPlugin('client', true)
       ]
     });
 
-  if (webpackOptions.prod) {
-    clientConfig = webpackMerge({}, clientConfig, prodPartial);    
+  if (options.prod) {
+    clientConfig = webpackMerge({}, clientConfig);    
   } else {
     clientConfig.devtool = 'inline-source-map';
   }

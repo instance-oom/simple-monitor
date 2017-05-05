@@ -1,12 +1,19 @@
 ﻿const webpack = require('webpack');
+const { root } = require('./helpers');
+const clientBundleOutputDir = root('./wwwroot/assets/js');
 
-module.exports = {  
+module.exports = {
+  entry: {
+    'main': root('./ClientApp/main.ts'),
+    'angular': root('./ClientApp/angular.ts')
+  },
   resolve: {
     extensions: ['.ts', '.js']
   },
   output: {
     filename: '[name].js',
-    publicPath: '/dist/'
+    publicPath: '/dist/',
+    path: clientBundleOutputDir
   },
   module: {
     rules: [
@@ -19,7 +26,8 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['app', 'angular2']
+      name: ['main', 'angular']
     })
-  ]
+  ],
+  target: 'web'
 }

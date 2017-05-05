@@ -254,3 +254,4 @@ SimpleMonitor/wwwroot/dist/
 SimpleMonitor/wwwroot/assets/js/min/*.min.js
 SimpleMonitor/wwwroot/assets/css/min/*.min.css
 .vscode/
+SimpleMonitor/wwwroot/dist/angular2.js

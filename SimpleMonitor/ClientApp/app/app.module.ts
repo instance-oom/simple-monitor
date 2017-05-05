@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
+import { PAGES } from './pages';
+import { AppRouting } from './app.routes';
 import { SimpleMonitorApp } from './app';
 
 @NgModule({
@@ -15,10 +17,12 @@ import { SimpleMonitorApp } from './app';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    CommonModule
+    CommonModule,
+    AppRouting
   ],
   declarations: [
-    SimpleMonitorApp
+    SimpleMonitorApp,
+    ...PAGES
   ],
   bootstrap: [
     SimpleMonitorApp

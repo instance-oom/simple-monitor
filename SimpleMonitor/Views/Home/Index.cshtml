@@ -1,7 +1,7 @@
 ﻿@section links
 {
   <environment Names="Development">
-    <link rel="stylesheet" asp-href-include="assets/css/**/*.css" asp-src-exclude="assets/css/min" asp-append-version="true" />    
+    <link rel="stylesheet" asp-href-include="assets/css/**/*.css" asp-href-exclude="assets/css/min/" asp-append-version="true" />    
   </environment>
 
   <environment Names="Production">
@@ -12,9 +12,7 @@
 @section scripts
 {
   <environment Names="Development">
-    <script asp-src-include="assets/js/**/*.js" asp-src-exclude="assets/js/min" asp-append-version="true"></script>
-    <script src="dist/angular2.js" asp-append-version="true"></script>
-    <script src="dist/main.js" asp-append-version="true"></script>
+    <script asp-src-include="assets/js/**/*.js" asp-src-exclude="assets/js/min/" asp-append-version="true"></script>
   </environment>
 
   <environment Names="Production">
