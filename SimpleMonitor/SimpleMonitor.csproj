@@ -41,8 +41,7 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="wwwroot\assets\css\min\_placeholder.txt" />
-    <Content Include="wwwroot\assets\js\min\_placeholder.txt" />
+    <Content Include="wwwroot\**\*" />    
     <Content Update="wwwroot\assets\css\vendor\**\*" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\assets\css\*.css" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\assets\js\vendor\**\*" CopyToPublishDirectory="Never" />
@@ -50,7 +49,7 @@
   </ItemGroup>
 
   <Target Name="RunWebpackProd" AfterTargets="ComputeFilesToPublish">
-    <Exec Command="webpack --env.prod --color --progress" />    
+    <Exec Command="webpack --env.prod --color" />    
     <Exec Command="dotnet bundle" />
   </Target>
   <Target Name="CleanDist" AfterTargets="Clean">

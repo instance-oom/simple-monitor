@@ -12,7 +12,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    publicPath: '/dist/',
+    publicPath: '/',
     path: clientBundleOutputDir
   },
   module: {
