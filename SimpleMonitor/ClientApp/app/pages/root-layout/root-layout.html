@@ -1,3 +1,48 @@
-﻿<h2>side bar</h2>
+﻿<div class="wrapper">
+  <m-sidebar [menuItems]="menuItems" (onMenuClick)="onMenuClick($event)">
+    <ul class="sidebar-menu">
+      <li>
+        <a href="javascript:void(0)" (click)="showAddGroup()">
+          <i class="fa fa-circle-o text-aqua"></i>
+          <span>Add Group</span>
+        </a>
+      </li>
+    </ul>
+  </m-sidebar>
+  <div class="content-wrapper">
+    <router-outlet></router-outlet>
+  </div>
+</div>
 
-<router-outlet></router-outlet>
+<m-modal [options]="addGroupModal">
+  <form novalidate [formGroup]="form" (ngSubmit)="saveGroup(form)" *ngIf="form">
+    <div class="form-group" [ngClass]="{'has-error': form.controls.Name.invalid && submitted }">
+      <label>Name</label>
+      <input type="text" class="form-control" placeholder="Enter name" autocomplete="off" name="Name" formControlName="Name">
+      <div *ngIf="form.controls.Name.invalid && submitted">
+        <span class="help-block" *ngIf="form.controls.Name.hasError('required')">Name is required.</span>
+        <span class="help-block" *ngIf="form.controls.Name.hasError('minlength')">Name must be more than 2 characters.</span>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': form.controls.Description.invalid && submitted }">
+      <label>Description</label>
+      <textarea class="form-control" rows="3" maxlength="200" name="Description" formControlName="Description"></textarea>
+      <div *ngIf="form.controls.Description.invalid && submitted">
+        <span class="help-block" *ngIf="form.controls.Description.hasError('required')">Description is required.</span>
+        <span class="help-block" *ngIf="form.controls.Description.hasError('maxlength')">Description cannot be more than 200 characters.</span>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': form.controls.Icon.invalid && submitted }">
+      <label>Icon</label>
+      <input type="text" class="form-control" placeholder="Enter icon class" autocomplete="off" maxlength="20" name="Icon" formControlName="Icon">
+      <div *ngIf="form.controls.Icon.invalid && submitted">
+        <span class="help-block" *ngIf="form.controls.Icon.hasError('maxlength')">Icon cannot be more than 10 characters.</span>
+      </div>
+    </div>
+    <hr>
+    <div class="form-group text-right">
+      <button type="button" class="btn btn-default btn-flat" (click)="addGroupModal.show = false">Cancel</button>
+      <button type="submit" class="btn btn-success btn-flat">Submit</button>
+    </div>
+  </form>
+</m-modal>

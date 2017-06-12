@@ -9,6 +9,9 @@ import { CommonModule } from '@angular/common';
 import { PAGES } from './pages';
 import { AppRouting } from './app.routes';
 import { SimpleMonitorApp } from './app';
+import { COMPONENTS } from './components';
+import { DIRECTIVES } from './directives';
+import { SERVICES } from './services';
 
 @NgModule({
   imports: [
@@ -22,7 +25,12 @@ import { SimpleMonitorApp } from './app';
   ],
   declarations: [
     SimpleMonitorApp,
+    ...COMPONENTS,
+    ...DIRECTIVES,
     ...PAGES
+  ],
+  providers: [
+    ...SERVICES
   ],
   bootstrap: [
     SimpleMonitorApp
