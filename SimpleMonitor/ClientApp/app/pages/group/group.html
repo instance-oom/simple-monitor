@@ -1,0 +1,217 @@
+<div class="content-header">
+  <h1>
+    {{ group?.Name }}
+    <small>
+      <a href="javascript:void(0)" (click)="showEditGroup()">
+        <i class="fa fa-pencil"></i>
+      </a>
+    </small>
+    <div class="btn-group pull-right" *ngIf="group?.PanelInfos?.length > 0">
+      <button type="button" class="btn btn-default btn-flat" (click)="manualRefresh()">
+        {{ getRefreshDropdownText() }}
+      </button>
+      <button type="button" class="btn btn-default btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Refresh Dropdown</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="javascript:void(0)" (click)="setRefreshTime(0)">Manual Refresh</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="setRefreshTime(10)">Every 10 seconds</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="setRefreshTime(30)">Every 30 seconds</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="setRefreshTime(60)">Every 1 minute(s)</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="setRefreshTime(300)">Every 5 minute(s)</a>
+        </li>
+      </ul>
+    </div>
+  </h1>
+</div>
+<hr style="margin-bottom: 0; border-color: lightgray;">
+<div class="content" *ngIf="group">
+  <div class="box" *ngFor="let panel of group.PanelInfos;">
+    <div class="box-header with-border">
+      <h3 class="box-title">
+        {{ panel.Name }}
+        <small>
+        <a href="javascript:void(0)" (click)="showEditPanel(panel)">
+          <i class="fa fa-pencil"></i>
+        </a>
+        </small>
+        <i class="fa fa-spinner fa-spin" *ngIf="panel?.isDone != panel?.HostInfos?.length"></i>
+      </h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" title="Remove" (click)="showDelPanelModal(panel)">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>Server</th>
+            <th>Url</th>
+            <th>StatusCode</th>
+            <ng-template ngFor let-column [ngForOf]="panel.ColumnInfos">
+              <th>{{ column.DisplayName }}</th>
+            </ng-template>
+          </tr>
+          <tr *ngFor="let host of panel.HostInfos; let i = index;">
+            <td>{{ i+1 }}.</td>
+            <td>{{ host.DisplayName }}</td>
+            <td>{{ host.Url }}</td>
+            <td>{{ host?.result?.httpStatus }}</td>
+            <ng-template ngFor let-column [ngForOf]="panel.ColumnInfos">
+              <td>
+                <span *ngIf="host?.result">
+                  {{ host.result[column.DisplayName] }}
+                </span>
+                <span *ngIf="!host?.result">Loading...</span>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="text-center">
+    <button type="button" class="btn btn-danger btn-flat" (click)="showDelGroupModal()">
+      <i class="fa fa-remove"></i>
+      Delete Group
+    </button>
+    <button type="button" class="btn bg-olive btn-flat" (click)="showAddPanel()">
+      <i class="fa fa-plus"></i>
+      Add Panel
+    </button>
+  </div>
+</div>
+
+<m-modal [options]="delPanelModal">
+  <h4>Are you sure to delete <b class="text-danger">{{ delPanelTarget?.Name }}</b>?</h4>
+</m-modal>
+
+<m-modal [options]="editPanelModal">
+  <form novalidate [formGroup]="panelForm" (ngSubmit)="savePanel(panelForm)" *ngIf="panelForm">
+    <div class="form-group" [ngClass]="{'has-error': panelForm.controls.Name.invalid && submitted }">
+      <label>Name</label>
+      <input type="text" class="form-control" placeholder="Enter name" autocomplete="off" name="Name" formControlName="Name">
+      <div *ngIf="panelForm.controls.Name.invalid && submitted">
+        <span class="help-block" *ngIf="panelForm.controls.Name.hasError('required')">Name is required.</span>
+        <span class="help-block" *ngIf="panelForm.controls.Name.hasError('minlength')">Name must be more than 2 characters.</span>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': panelForm.controls.Description.invalid && submitted }">
+      <label>Description</label>
+      <textarea class="form-control" rows="3" maxlength="200" name="Description" formControlName="Description"></textarea>
+      <div *ngIf="panelForm.controls.Description.invalid && submitted">
+        <span class="help-block" *ngIf="panelForm.controls.Description.hasError('required')">Description is required.</span>
+        <span class="help-block" *ngIf="panelForm.controls.Description.hasError('maxlength')">Description cannot be more than 200 characters.</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Hosts</label>
+      <div class="host-well" formArrayName="HostInfos">
+        <div class="flex-display" *ngFor="let host of panelForm.controls.HostInfos.controls; let i = index;" [formGroupName]="i">
+          <div class="item" [ngClass]="{'has-error': host.controls.DisplayName.invalid && submitted }">
+            <input type="text" class="form-control" name="DisplayName" autocomplete="off" formControlName="DisplayName" placeholder="Enter displayName">
+            <div *ngIf="host.controls.DisplayName.invalid && submitted">
+              <span class="help-block" *ngIf="host.controls.DisplayName.hasError('required')">DisplayName is required.</span>
+            </div>
+          </div>
+          <div class="item" [ngClass]="{'has-error': host.controls.Url.invalid && submitted }">
+            <input type="text" class="form-control" name="Url" autocomplete="off" formControlName="Url" placeholder="Enter url" pattern="^((https|http)?:\/\/)[^\s]+">
+            <div *ngIf="host.controls.Url.invalid && submitted">
+              <span class="help-block" *ngIf="host.controls.Url.hasError('required')">Url is required.</span>
+              <span class="help-block" *ngIf="host.controls.Url.hasError('pattern')">Invalid url.</span>
+            </div>
+          </div>
+          <div class="text-left" style="width: 50px">
+            <a href="javascript:void(0)" (click)="copyHost(host)"><i class="fa fa-copy"></i></a>
+            <a href="javascript:void(0)" (click)="removeHost(i)"><i class="fa fa-remove text-danger"></i></a>
+          </div>
+        </div>
+        <button type="button" class="btn btn-default btn-flat btn-sm" (click)="addHost()">
+          <i class="fa fa-plus"></i> Add Host
+        </button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>ColumnInfos</label>
+      <div class="host-well" formArrayName="ColumnInfos">
+        <div class="flex-display" *ngFor="let column of panelForm.controls.ColumnInfos.controls; let i = index;" [formGroupName]="i">
+          <div class="item" [ngClass]="{'has-error': column.controls.DisplayName.invalid && submitted }">
+            <input type="text" class="form-control" name="DisplayName" autocomplete="off" formControlName="DisplayName" placeholder="Enter displayName">
+            <div *ngIf="column.controls.DisplayName.invalid && submitted">
+              <span class="help-block" *ngIf="column.controls.DisplayName.hasError('required')">DisplayName is required.</span>
+              <span class="help-block" *ngIf="column.controls.DisplayName.hasError('maxlength')">DisplayName cannot be more than 20 charters.</span>
+            </div>
+          </div>
+          <div class="item" [ngClass]="{'has-error': column.controls.Key.invalid && submitted }">
+            <input type="text" class="form-control" name="Key" autocomplete="off" formControlName="Key" placeholder="Enter key (ex data.status)">
+            <div *ngIf="column.controls.Key.invalid && submitted">
+              <span class="help-block" *ngIf="column.controls.Key.hasError('required')">Key is required.</span>
+              <span class="help-block" *ngIf="column.controls.Key.hasError('maxlength')">Key cannot be more than 100 charters.</span>
+            </div>
+          </div>
+          <div class="text-left" style="width: 50px">
+            <a href="javascript:void(0)" (click)="removeColumn(i)"><i class="fa fa-remove text-danger"></i></a>
+          </div>
+        </div>
+        <button type="button" class="btn btn-default btn-flat btn-sm" (click)="addColumn()">
+          <i class="fa fa-plus"></i> Add Column
+        </button>
+      </div>
+    </div>
+    <hr>
+    <div class="form-group text-right">
+      <button type="button" class="btn btn-default btn-flat" (click)="editPanelModal.show = false">Cancel</button>
+      <button type="submit" class="btn btn-success btn-flat">Submit</button>
+    </div>
+  </form>
+</m-modal>
+
+<m-modal [options]="delGroupModal">
+  <h4>Are you sure to delete <b class="text-danger">{{ group?.Name }}</b>?</h4>
+</m-modal>
+
+<m-modal [options]="editGroupModal">
+  <form novalidate [formGroup]="groupForm" (ngSubmit)="saveGroup(groupForm)" *ngIf="groupForm">
+    <div class="form-group" [ngClass]="{'has-error': groupForm.controls.Name.invalid && submitted }">
+      <label>Name</label>
+      <input type="text" class="form-control" placeholder="Enter name" autocomplete="off" name="Name" formControlName="Name">
+      <div *ngIf="groupForm.controls.Name.invalid && submitted">
+        <span class="help-block" *ngIf="groupForm.controls.Name.hasError('required')">Name is required.</span>
+        <span class="help-block" *ngIf="groupForm.controls.Name.hasError('minlength')">Name must be more than 2 characters.</span>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': groupForm.controls.Description.invalid && submitted }">
+      <label>Description</label>
+      <textarea class="form-control" rows="3" maxlength="200" name="Description" formControlName="Description"></textarea>
+      <div *ngIf="groupForm.controls.Description.invalid && submitted">
+        <span class="help-block" *ngIf="groupForm.controls.Description.hasError('required')">Description is required.</span>
+        <span class="help-block" *ngIf="groupForm.controls.Description.hasError('maxlength')">Description cannot be more than 200 characters.</span>
+      </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': groupForm.controls.Icon.invalid && submitted }">
+      <label>Icon</label>
+      <input type="text" class="form-control" placeholder="Enter icon class" autocomplete="off" maxlength="20" name="Icon" formControlName="Icon">
+      <div *ngIf="groupForm.controls.Icon.invalid && submitted">
+        <span class="help-block" *ngIf="groupForm.controls.Icon.hasError('maxlength')">Icon cannot be more than 10 characters.</span>
+      </div>
+    </div>
+    <hr>
+    <div class="form-group text-right">
+      <button type="button" class="btn btn-default btn-flat" (click)="editGroupModal.show = false">Cancel</button>
+      <button type="submit" class="btn btn-success btn-flat">Submit</button>
+    </div>
+  </form>
+</m-modal>
